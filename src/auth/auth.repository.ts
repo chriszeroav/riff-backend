@@ -14,4 +14,12 @@ export class AuthRepository {
   async generateToken(payload: AuthPayload) {
     return await this.jwtService.signAsync(payload);
   }
+
+  async verifyToken(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token);
+    } catch (error) {
+      return null;
+    }
+  }
 }
