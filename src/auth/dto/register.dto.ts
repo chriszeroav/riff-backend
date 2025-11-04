@@ -1,6 +1,6 @@
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterDto {
   @IsOptional()
   @IsString()
   @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres' })

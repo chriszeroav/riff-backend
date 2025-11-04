@@ -1,7 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthRepository } from './auth.repository';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +47,30 @@ export class AuthService {
 
     return {
       data: { token },
+      success: true,
+      error: null,
+    };
+  }
+
+  async register({ name, email, password }: RegisterDto) {
+    const userFound = await this.usersRepository.findUserByEmail(email);
+
+    if (userFound) {
+      throw new ConflictException({
+        data: null,
+        success: false,
+        error: 'El correo electrónico ya está en uso',
+      });
+    }
+
+    const user = await this.usersRepository.createUser({
+      name,
+      email,
+      password,
+    });
+
+    return {
+      data: user,
       success: true,
       error: null,
     };
